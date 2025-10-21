@@ -14,6 +14,7 @@ public:
     void render();
     void setVelocity(float coeff, float duration);
     void setFireBall(float duration);
+    bool isFireBall() const { return _isFireBall; }
 
 private:
     sf::CircleShape _sprite;

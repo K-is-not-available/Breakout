@@ -34,5 +34,5 @@ fire ball (green)
 # Time Details and Changelist
 <Add information to this section about the time you've taken for this task along with a professional changelist.>
 
-- Bug Fix 'PowerupFireball.h'
-- 
+- Bug Fix 'PowerupFireball.h' (5 minutes)
+- Added multi hit functionality to the bricks to make fireball more impactful (1 hr)

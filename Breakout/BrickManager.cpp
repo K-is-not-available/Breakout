@@ -30,7 +30,7 @@ void BrickManager::render()
     }
 }
 
-int BrickManager::checkCollision(sf::CircleShape& ball, sf::Vector2f& direction)
+int BrickManager::checkCollision(sf::CircleShape& ball, sf::Vector2f& direction, Ball& col)
 {
     int collisionResponse = 0;  // set to 1 for horizontal collision and 2 for vertical.
     for (auto& brick : _bricks) {
@@ -49,19 +49,36 @@ int BrickManager::checkCollision(sf::CircleShape& ball, sf::Vector2f& direction)
         // Mark the brick as destroyed (for simplicity, let's just remove it from rendering)
         // In a complete implementation, you would set an _isDestroyed flag or remove it from the vector
 
-        if (brick.isDamaged())
+
+        //// If brick is damaged, destroy brick
+        //if (brick.isDamaged())  
+        //{
+        //    brick = _bricks.back();
+        //    _bricks.pop_back();
+        //    break;
+        //}
+
+        //// If brick is undamaged, damage brick
+        //else
+        //{
+        //    brick.setDamaged(true);
+        //}
+
+        // If brick is not damaged and the ball isnt a fireball, damage on contact
+        if (!brick.isDamaged() && !col.isFireBall())
+        {
+            brick.setDamaged(true);
+        }
+        // If brick is damaged or the ball is on fire, destroy on contact
+        else
         {
             brick = _bricks.back();
             _bricks.pop_back();
             break;
         }
 
-        else
-        {
-            brick.setDamaged(true);
-        }
-
     }
+
     if (_bricks.size() == 0)
     {
         _gameManager->levelComplete();
