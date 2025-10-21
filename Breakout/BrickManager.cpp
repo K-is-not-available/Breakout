@@ -127,7 +127,6 @@ void BrickManager::infectNearbyBricks(Brick& infected)
         }
     }
 
-   
 }
 
 
