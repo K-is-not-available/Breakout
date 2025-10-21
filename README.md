@@ -36,3 +36,4 @@ fire ball (green)
 
 - Bug Fix 'PowerupFireball.h' (5 minutes)
 - Added multi hit functionality to the bricks to make fireball more impactful (1 hr)
+- Removed fireball's ability to pass through objects, fireball now destroys undamaged blocks (30 minutes)

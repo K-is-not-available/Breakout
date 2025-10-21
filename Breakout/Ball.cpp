@@ -3,7 +3,7 @@
 
 Ball::Ball(sf::RenderWindow* window, float velocity, GameManager* gameManager)
     : _window(window), _velocity(velocity), _gameManager(gameManager),
-    _timeWithPowerupEffect(0.f), _isFireBall(false), _isAlive(true), _direction({1,1})
+    _timeWithPowerupEffect(0.f), _isFireBall(false), _isInfBall(false), _isAlive(true), _direction({1,1})
 {
     _sprite.setRadius(RADIUS);
     _sprite.setFillColor(sf::Color::Cyan);
@@ -28,6 +28,7 @@ void Ball::update(float dt)
         else
         {
             setFireBall(0);    // disable fireball
+            setInfBall(0);
             _sprite.setFillColor(sf::Color::Cyan);  // back to normal colour.
         }        
     }
@@ -38,6 +39,14 @@ void Ball::update(float dt)
         // Flickering effect
         int flicker = rand() % 50 + 205; // Random value between 205 and 255
         _sprite.setFillColor(sf::Color(flicker, flicker / 2, 0)); // Orange flickering color
+    }
+
+    // Infball effect
+    if (_isInfBall)
+    {
+        // Flickering effect
+        int flicker = rand() % 50 + 400; // Random value between 400 and 450
+        _sprite.setFillColor(sf::Color(0, flicker, 0)); // Green flickering color
     }
 
     // Update position with a subtle floating-point error
@@ -113,4 +122,18 @@ void Ball::setFireBall(float duration)
     }
     _isFireBall = false;
     _timeWithPowerupEffect = 0.f;    
+}
+
+void Ball::setInfBall(float duration)
+{
+    if (duration)
+    {
+        _isInfBall = true;
+        _timeWithPowerupEffect = duration;
+        return;
+    }
+    _isInfBall = false;
+    _timeWithPowerupEffect = 0.f;
+
+
 }

@@ -37,6 +37,8 @@ void Brick::render(sf::RenderWindow& window)
         _shape.setFillColor(sf::Color::Yellow);
     }
 
+
+
     //if (!_isDestroyed && !_isDamaged)   // If not destroyed or damaged
     //{
     //    //_shape.setTexture(&_texture);

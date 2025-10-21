@@ -64,17 +64,38 @@ int BrickManager::checkCollision(sf::CircleShape& ball, sf::Vector2f& direction,
         //    brick.setDamaged(true);
         //}
 
-        // If brick is not damaged and the ball isnt a fireball, damage on contact
-        if (!brick.isDamaged() && !col.isFireBall())
+        //// If brick is undamaged and the ball isnt a fireball, damage on contact
+        //if (!brick.isDamaged() && !col.isFireBall())
+        //{
+        //    brick.setDamaged(true);
+        //}
+        //else if (col.isInfBall())
+        //{
+        //    brick.setDamaged(true);
+        //    infectNearbyBricks(brick);
+        //    break;
+        //}
+        //// If brick is damaged or the ball is on fire, destroy on contact
+        //else
+        //{
+        //    brick = _bricks.back();
+        //    _bricks.pop_back();
+        //    break;
+        //}
+
+        if (!col.isInfBall() && !col.isFireBall())
         {
-            brick.setDamaged(true);
+            damageBrick(brick);
         }
-        // If brick is damaged or the ball is on fire, destroy on contact
-        else
+        else if (col.isInfBall())
+        {
+            damageBrick(brick);
+            infectNearbyBricks(brick);
+        }
+        else if (col.isFireBall())
         {
             brick = _bricks.back();
             _bricks.pop_back();
-            break;
         }
 
     }
@@ -85,3 +106,46 @@ int BrickManager::checkCollision(sf::CircleShape& ball, sf::Vector2f& direction,
     }
     return collisionResponse;
 }
+
+void BrickManager::infectNearbyBricks(Brick& infected)
+{
+    const sf::FloatRect brickBounds = infected.getBounds();
+    const float infectionRange = brickBounds.width * 2.f;
+
+    for (auto& brick : _bricks)
+    {
+        if (&brick == &infected) continue;  // Skip infected brick
+
+        sf::FloatRect bounds = brick.getBounds();
+
+        bool getsInfected = std::abs(bounds.left - brickBounds.left) < infectionRange && std::abs(bounds.top - brickBounds.top) < brickBounds.height * 2.f;
+    
+        // If in infection range
+        if (getsInfected && !brick.isDamaged())
+        {
+            damageBrick(brick);
+        }
+    }
+
+   
+}
+
+
+void BrickManager::damageBrick(Brick& brick)
+{
+    // If damaged or using fireball, destroy
+    if (brick.isDamaged())
+    {
+        brick = _bricks.back();
+        _bricks.pop_back();
+    }
+
+    // Damage brick
+    else if(!brick.isDamaged())
+    {
+        brick.setDamaged(true);
+    }
+
+
+}
+
