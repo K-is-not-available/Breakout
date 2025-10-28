@@ -10,6 +10,7 @@
 #include "PowerupFastBall.h"
 #include "PowerupFireBall.h"
 #include "PowerupInfectedBall.h"
+#include "PowerupPhantomBall.h"
 #include "Paddle.h"
 #include "Ball.h"
 

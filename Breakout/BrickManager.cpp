@@ -32,6 +32,8 @@ void BrickManager::render()
 
 int BrickManager::checkCollision(sf::CircleShape& ball, sf::Vector2f& direction, Ball& col)
 {
+    //if (col.isPhantomBall()) return 0;
+
     int collisionResponse = 0;  // set to 1 for horizontal collision and 2 for vertical.
     for (auto& brick : _bricks) {
         if (!brick.getBounds().intersects(ball.getGlobalBounds())) continue;    // no collision, skip.
@@ -40,14 +42,18 @@ int BrickManager::checkCollision(sf::CircleShape& ball, sf::Vector2f& direction,
         float ballY = ballPosition.y + 0.5f * ball.getGlobalBounds().height;
         sf::FloatRect brickBounds = brick.getBounds();
 
-        // default vertical bounce (collision is top/bottom)
-        collisionResponse = 2;
-        if (ballY > brickBounds.top && ballY < brickBounds.top + brickBounds.height)
+        // Skip bounce if phantom
+        if (!col.isPhantomBall())
+        {
+            // default vertical bounce (collision is top/bottom)
+            collisionResponse = 2;
+            if (ballY > brickBounds.top && ballY < brickBounds.top + brickBounds.height)
             // unless it's horizontal (collision from side)
             collisionResponse = 1;
+        }
 
-        // Mark the brick as destroyed (for simplicity, let's just remove it from rendering)
-        // In a complete implementation, you would set an _isDestroyed flag or remove it from the vector
+        // Phantom is too much like fireball but without bounce, possibly only allow it to damage blocks
+
 
 
         //// If brick is damaged, destroy brick
@@ -83,7 +89,7 @@ int BrickManager::checkCollision(sf::CircleShape& ball, sf::Vector2f& direction,
         //    break;
         //}
 
-        if (!col.isInfBall() && !col.isFireBall())
+        if (!col.isInfBall() && !col.isFireBall() && !col.isPhantomBall())
         {
             damageBrick(brick);
         }
@@ -96,6 +102,10 @@ int BrickManager::checkCollision(sf::CircleShape& ball, sf::Vector2f& direction,
         {
             brick = _bricks.back();
             _bricks.pop_back();
+        }
+        else if (col.isPhantomBall())
+        {
+            phaseThroughBricks(brick);
         }
 
     }
@@ -125,6 +135,16 @@ void BrickManager::infectNearbyBricks(Brick& infected)
         {
             damageBrick(brick);
         }
+    }
+
+}
+
+// Pass through bricks, damaging them
+void BrickManager::phaseThroughBricks(Brick& brick)
+{
+    if (!brick.isDamaged())
+    {
+        brick.setDamaged(true);
     }
 
 }

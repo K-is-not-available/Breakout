@@ -13,6 +13,7 @@ public:
     void render();
     int checkCollision(sf::CircleShape& ball, sf::Vector2f& direction, Ball& col);
     void infectNearbyBricks(Brick& infect);
+    void phaseThroughBricks(Brick& ghost);
     void damageBrick(Brick& brick);
 
 private:
